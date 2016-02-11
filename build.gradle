@@ -1,0 +1,29 @@
+group 'com.la0rg.vpog'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+jar {
+    manifest {
+        attributes 'Main-class': 'com.la0rg.vpog.Gzchecker'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+tasks.withType(org.gradle.api.tasks.compile.JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+    compile 'org.jsoup:jsoup:1.7.2'
+}
+
