@@ -34,12 +34,12 @@ public class Gzchecker {
         try {
             PrintWriter log = new PrintWriter(new File(dirName + File.separator + "Результаты за " + dirName + ".txt"));
             for (String check : checks) {
-                log.write("Проверяем: " + check + "\n\r");
+                log.write("Проверяем: " + check + "\r\n");
                 System.out.println("Проверяем: " + check);
                 List<String> htmls = checkOne(check, dirName, log);
                 for (String html : htmls) {
                     String fileName = dirName + File.separator + check + "-" + ThreadLocalRandom.current().nextInt(100_000, 999_999) + ".html";
-                    log.write("Сохранение результата в файл: " + fileName + "\n\r");
+                    log.write("Сохранение результата в файл: " + fileName + "\r\n");
                     File file = new File(fileName);
                     PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"));
                     writer.write(html);
@@ -62,36 +62,36 @@ public class Gzchecker {
                     + "&publishDateTo=&updateDateFrom=&updateDateTo=&orderStages=AF&_orderStages=on&orderStages=CA&_orderStages=on&_orderStages=on&_orderStages=on&sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_50&pageNo=1&searchString=" +
                     URLEncoder.encode(name, "UTF-8")
                     + "&strictEqual=false&morphology=false&showLotsInfo=false&isPaging=false&isHeaderClick=&checkIds=";
-            //log.write("Поиск: " + url + "\n\r");
+            //log.write("Поиск: " + url + "\r\n");
             Document doc = Jsoup.connect(url).timeout(10000).get();
             Elements elements = doc.select(".amountTenderTd a");
             if (elements.size() == 0) {
-                log.write("Результатов не найдено.\n\r");
+                log.write("Результатов не найдено.\r\n");
                 return res;
             }
-            log.write("Найдено результатов: " + elements.size() + "\n\r");
+            log.write("Найдено результатов: " + elements.size() + "\r\n");
             for (Element e : elements) {
                 try {
                     String printUrl = e.attr("href");
                     if (!e.attr("href").startsWith("http")) {
                         printUrl = site + printUrl;
                     }
-                    log.write("Получение: " + printUrl + "\n\r");
+                    log.write("Получение: " + printUrl + "\r\n");
                     Document printForm = Jsoup.connect(printUrl).timeout(10000).get();
                     String outerHtml = printForm.outerHtml();
                     if (outerHtml != null) {
                         res.add(outerHtml);
-                        log.write("Получено успешно.\n\r");
+                        log.write("Получено успешно.\r\n");
                     } else {
-                        log.write("Результат пустой.\n\r");
+                        log.write("Результат пустой.\r\n");
                     }
                 } catch (IOException e1) {
-                    log.write("ОШИБКА при получении результата.\n\r");
+                    log.write("ОШИБКА при получении результата.\r\n");
                     log.write(e1.getMessage());
                 }
             }
         } catch (IOException e) {
-            log.write("ОШИБКА поиска по запросу: " + name + ".\n\r");
+            log.write("ОШИБКА поиска по запросу: " + name + ".\r\n");
             log.write(e.getMessage());
         }
         return res;
