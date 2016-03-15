@@ -102,7 +102,7 @@ public class Gzchecker {
                     dateTo
                     + "&updateDateFrom=&updateDateTo=&orderStages=AF&_orderStages=on&orderStages=CA&_orderStages=on&orderStages=PC&_orderStages=on&_orderStages=on&sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_50&pageNo=1&searchString=" +
                     URLEncoder.encode(name, "UTF-8")
-                    + "&strictEqual=false&morphology=false&showLotsInfo=false&isPaging=false&isHeaderClick=&checkIds=";
+                    + "&strictEqual=true&morphology=false&showLotsInfo=false&isPaging=false&isHeaderClick=&checkIds=";
             Connection.Response response = Jsoup.connect(url).timeout(0).execute();
             if (response.statusCode() != 200) {
                 log.append("Сервер ответил с ошибкой.\r\n");
