@@ -1,5 +1,5 @@
 group 'com.la0rg.vpog'
-version '2.0'
+version '2.2'
 
 apply plugin: 'java'
 

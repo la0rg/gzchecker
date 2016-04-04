@@ -46,7 +46,7 @@ public class Gzchecker {
                 for (int i = 0; i < checks.size(); i++) {
                     String check = checks.get(i);
                     log.append("Проверяем: " + check + "\r\n");
-                    handles.add(executorService.submit(() -> checkOne(check, currentDayName, nextDayName, log)));
+                    handles.add(executorService.submit(() -> checkOne(check, currentDayName, currentDayName, log)));
                 }
 
                 boolean hasResult = false;
@@ -96,20 +96,18 @@ public class Gzchecker {
         System.out.println("Проверяем: " + name);
         List<String> res = new ArrayList<>();
         try {
-            String url = site + "/epz/order/quicksearch/update.html?placeOfSearch=FZ_44&_placeOfSearch=on&placeOfSearch=FZ_223&_placeOfSearch=on&_placeOfSearch=on&priceFrom=0&priceTo=200+000+000+000&publishDateFrom=" +
-                    dateFrom
-                    + "&publishDateTo=" +
-                    dateTo
-                    + "&updateDateFrom=&updateDateTo=&orderStages=AF&_orderStages=on&orderStages=CA&_orderStages=on&orderStages=PC&_orderStages=on&_orderStages=on&sortDirection=false&sortBy=UPDATE_DATE&recordsPerPage=_50&pageNo=1&searchString=" +
-                    URLEncoder.encode(name, "UTF-8")
-                    + "&strictEqual=true&morphology=false&showLotsInfo=false&isPaging=false&isHeaderClick=&checkIds=";
+            String url = site + "/epz/order/quicksearch/search.html?searchString=" + URLEncoder.encode(name, "UTF-8") +
+                    "&strictEqual=on&pageNumber=1&sortDirection=false&recordsPerPage=_50" +
+                    "&showLotsInfoHidden=false&fz44=on&fz223=on&fz94=on&regions=5277392&priceFrom=0&priceTo=&currencyId=&publishDateFrom=" + dateFrom +
+                    "&publishDateTo=" + dateTo + "&updateDateFrom=&updateDateTo=&sortBy=UPDATE_DATE";
+
             Connection.Response response = Jsoup.connect(url).timeout(0).execute();
             if (response.statusCode() != 200) {
                 log.append("Сервер ответил с ошибкой.\r\n");
                 return new CheckResult();
             }
             Document doc = response.parse();
-            Elements elements = doc.select(".amountTenderTd a");
+            Elements elements = doc.select(".registerBox a.printLink");
             if (elements.size() == 0) {
                 log.append("Результатов не найдено.\r\n");
                 return new CheckResult();
